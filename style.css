@@ -1,113 +1,86 @@
-// --- DOM要素の取得 ---
-const scenes = document.querySelectorAll('.scene');
-const guchiTextarea = document.getElementById('guchi-textarea');
-const inputTitle = document.getElementById('input-title');
-const responseArea = document.getElementById('response-area');
-const responseCharImage = document.getElementById('response-character-image');
-const responseTextContainer = document.getElementById('response-text-container');
-const carouselContainer = document.querySelector('.carousel-container');
-const slides = document.querySelectorAll('.carousel-slide');
+@import url('https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap');
 
-// プレイヤー要素
-const bgmPlayer = document.getElementById('bgm-player');
-const sePlayer = document.getElementById('se-player');
+/* 全体の基本設定 */
+body { background-color: #000; color: #f0f0f0; font-family: 'Noto Serif JP', 'Sawarabi Mincho', serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center; }
+.scene { display: none; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 20px; box-sizing: border-box; }
+.scene.active { display: flex; }
+h1, h2 { font-weight: normal; z-index: 10;}
+textarea { width: 90%; max-width: 500px; height: 200px; margin: 20px 0; background-color: #222; border: 1px solid #444; color: #f0f0f0; padding: 10px; z-index: 10; font-size: 1rem;}
+button { background-color: #8c2323; color: white; border: none; padding: 10px 20px; cursor: pointer; margin: 10px; z-index: 10; font-size: 1rem;}
+button:hover { background-color: #ab3c3c; }
 
-// ボタン要素
-const startButton = document.getElementById('start-button');
-const selectCharacterButton = document.getElementById('select-character-button');
-const kuyoButton = document.getElementById('kuyo-button');
-const endButton = document.getElementById('end-button');
-const resetButton = document.getElementById('reset-button');
+/* タイトル画面 */
+/* ▼▼▼ この部分のファイル名を修正しました ▼▼▼ */
+#title-scene { background-image: url('hondo.png'); background-size: cover; background-position: center; position: relative; justify-content: center; gap: 15vh; }
+#title-scene::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); }
+#main-title { font-family: 'Yuji Syuku', serif; font-size: 4rem; color: #fff; text-shadow: 2px 2px 5px #000; writing-mode: vertical-rl; animation: fadeIn 3s ease-in-out; z-index: 10; margin-bottom: 0; padding-top: 0; }
+#start-button { margin-bottom: 0; }
+@keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
 
-// --- グローバル変数 ---
-let selectedCharacterId = null;
-let activeSlide = slides.length > 0 ? slides[0] : null;
-
-// --- キャラクター情報 ---
-const characters = {
-    shijima: { name: "慈愛の尼僧「静寂」", image: "shijima.png", responses: ["そうでしたか…あなたのその痛み、私がお預かりしますね。", "よく頑張りました。何も考えず、今はただ、心を休めなさい。", "大丈夫。あなたは一人ではありませんよ。"]},
-    raiden: { name: "破天荒な和尚「雷電」", image: "raiden.png", responses: ["喝！ そんな小言は燃してしまえ！ お前の道はそんなものに遮られん！", "うじうじするな！腹の底から声を出せ！悩みなんぞ吹き飛ぶわ！", "前だけを見ろ！下を向いている暇などないぞ！"]},
-    matabei: { name: "化け猫の古老「又兵衛」", image: "matabei.png", responses: ["フン、人間とは難儀なものよのう。まあ、うまい飯でも食って忘れニャされ。", "そんなことより、明日のご飯のことでも考えな。ニャー。", "おぬしの悩み、この又兵衛が爪とぎにしてやろう。ガリガリ…。"]}
-};
-
-// --- 関数定義 ---
-function changeScene(targetSceneId) {
-    scenes.forEach(scene => scene.classList.toggle('active', scene.id === targetSceneId));
+/* キャラクター選択画面（カルーセル） */
+#character-select-scene h2 {
+    margin-bottom: 0;
+}
+.carousel-container {
+    width: 100%;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
+    padding: 20px 0;
+}
+.carousel-container::-webkit-scrollbar {
+    display: none;
+}
+.carousel-track {
+    display: flex;
+    align-items: center;
+    gap: 5vw;
+    padding: 0 40vw; 
+}
+.carousel-slide {
+    flex: 0 0 200px;
+    scroll-snap-align: center;
+    text-align: center;
+}
+.carousel-slide img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #444;
+}
+.carousel-slide h3 {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    color: #fff;
+}
+#select-character-button {
+    margin-top: 20px;
 }
 
-function updateActiveSlide() {
-    const containerCenter = carouselContainer.getBoundingClientRect().left + carouselContainer.offsetWidth / 2;
-    let minDistance = Infinity;
-    let currentActiveSlide = null;
+/* 炎(GIF)画面 */
+#fire-gif { width: 90%; max-width: 450px; height: auto; }
 
-    slides.forEach(slide => {
-        const slideRect = slide.getBoundingClientRect();
-        const slideCenter = slideRect.left + slideRect.width / 2;
-        const distance = Math.abs(containerCenter - slideCenter);
+/* AIからの言葉 表示画面 */
+#response-area { display: flex; align-items: center; gap: 20px; max-width: 600px; background-color: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 10px; }
+#response-character-image { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+#response-text-container { text-align: left; }
 
-        if (distance < minDistance) {
-            minDistance = distance;
-            currentActiveSlide = slide;
-        }
-    });
+/* 終了画面 */
+#end-scene p { font-size: 1.2rem; }
 
-    if (currentActiveSlide && currentActiveSlide !== activeSlide) {
-        if(activeSlide) activeSlide.classList.remove('active');
-        currentActiveSlide.classList.add('active');
-        activeSlide = currentActiveSlide;
-    }
+/* スマホ向けスタイル */
+@media (max-width: 768px) {
+    h2 { font-size: 1.2rem; }
+    #main-title { font-size: 3.5rem; }
+
+    .carousel-track { gap: 10vw; padding: 0 35vw; }
+    .carousel-slide { flex: 0 0 150px; }
+    .carousel-slide img { width: 150px; height: 150px; }
+    .carousel-slide h3 { font-size: 1rem; }
+
+    #response-area { flex-direction: column; gap: 15px; padding: 15px; }
+    #response-character-image { width: 100px; height: 100px; }
+    #response-text-container { text-align: center; }
 }
-
-// --- イベントリスナーの設定 ---
-startButton.addEventListener('click', () => {
-    if (bgmPlayer.paused) { bgmPlayer.play(); }
-    changeScene('character-select-scene');
-    // シーン変更直後にカルーセルのアクティブ状態を一度更新
-    setTimeout(updateActiveSlide, 0);
-});
-
-carouselContainer.addEventListener('scroll', updateActiveSlide);
-
-// ページ読み込み完了時に最初のスライドをアクティブにする
-window.addEventListener('DOMContentLoaded', () => {
-    if(slides.length > 0) {
-        slides[0].classList.add('active');
-        activeSlide = slides[0];
-    }
-});
-
-selectCharacterButton.addEventListener('click', () => {
-    if (activeSlide) {
-        selectedCharacterId = activeSlide.dataset.character;
-        inputTitle.textContent = `${characters[selectedCharacterId].name}に話す`;
-        changeScene('input-scene');
-    }
-});
-
-kuyoButton.addEventListener('click', () => {
-    sePlayer.currentTime = 0;
-    sePlayer.play();
-    changeScene('fire-scene');
-    
-    const character = characters[selectedCharacterId];
-    const randomIndex = Math.floor(Math.random() * character.responses.length);
-    const message = character.responses[randomIndex];
-    
-    responseCharImage.src = character.image;
-    responseTextContainer.innerHTML = `<p>「${message}」</p><p style="font-size:0.8em; text-align:right;">- ${character.name} -</p>`;
-    
-    setTimeout(() => {
-        sePlayer.pause();
-        changeScene('response-scene');
-    }, 4000);
-});
-
-endButton.addEventListener('click', () => {
-    changeScene('end-scene');
-});
-
-resetButton.addEventListener('click', () => {
-    guchiTextarea.value = '';
-    selectedCharacterId = null;
-    changeScene('title-scene');
-});
