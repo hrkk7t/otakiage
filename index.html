@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>愚痴供養帖</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <audio id="bgm-player" src="bgm.mp3" loop></audio>
+    <audio id="se-player" src="fire_sound.mp3"></audio>
+
+    <section id="title-scene" class="scene active">
+        <h1 id="main-title">愚痴供養帖</h1>
+        <button id="start-button">心を鎮めに入る</button>
+    </section>
+
+    <section id="character-select-scene" class="scene">
+        <h2>どなたに話を聞いてもらいますか？</h2>
+        <div class="character-options">
+            <button class="character-button" data-character="shijima">慈愛の尼僧「静寂」</button>
+            <button class="character-button" data-character="raiden">破天荒な和尚「雷電」</button>
+            <button class="character-button" data-character="matabei">化け猫の古老「又兵衛」</button>
+        </div>
+    </section>
+    
+    <section id="input-scene" class="scene">
+        <h2 id="input-title"></h2>
+        <textarea id="guchi-textarea" placeholder="心の澱（おり）、ここに綴りください…"></textarea>
+        <button id="kuyo-button">お焚き上げをお願いする</button>
+    </section>
+
+    <section id="fire-scene" class="scene">
+        <img id="fire-gif" src="fire.gif" alt="炎">
+    </section>
+    
+    <section id="response-scene" class="scene">
+        <div id="response-area">
+            </div>
+        <button id="end-button">…心を鎮める</button>
+    </section>
+
+    <section id="end-scene" class="scene">
+        <p>またいつでも、心の荷を下ろしにお越しください。</p>
+        <button id="reset-button">表紙に戻る</button>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
