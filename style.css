@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap');
 
-/* 全体の設定 */
+/* ===================================
+   全体の基本設定
+   =================================== */
 body {
     background-color: #000;
     color: #f0f0f0;
@@ -11,27 +13,101 @@ body {
     height: 100vh;
     margin: 0;
     text-align: center;
-    overflow: hidden;
 }
-.scene { display: none; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 20px; box-sizing: border-box; }
-.scene.active { display: flex; }
-h1, h2 { font-weight: normal; z-index: 10;}
-textarea { width: 90%; max-width: 500px; height: 200px; margin: 20px 0; background-color: #222; border: 1px solid #444; color: #f0f0f0; padding: 10px; z-index: 10; font-size: 1rem;}
-button { background-color: #8c2323; color: white; border: none; padding: 10px 20px; cursor: pointer; margin: 10px; z-index: 10; font-size: 1rem;}
-button:hover { background-color: #ab3c3c; }
+
+.scene { 
+    display: none; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    width: 100%; 
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.scene.active { 
+    display: flex; 
+}
+
+h1, h2 { 
+    font-weight: normal; 
+    z-index: 10;
+}
+
+textarea { 
+    width: 90%; 
+    max-width: 500px; 
+    height: 200px; 
+    margin: 20px 0; 
+    background-color: #222; 
+    border: 1px solid #444; 
+    color: #f0f0f0; 
+    padding: 10px; 
+    z-index: 10; 
+    font-size: 1rem;
+}
+
+button { 
+    background-color: #8c2323; 
+    color: white; 
+    border: none; 
+    padding: 10px 20px; 
+    cursor: pointer; 
+    margin: 10px; 
+    z-index: 10; 
+    font-size: 1rem;
+}
+
+button:hover { 
+    background-color: #ab3c3c; 
+}
+
+/* ===================================
+   各場面のスタイル
+   =================================== */
 
 /* タイトル画面 */
-#title-scene { background-image: url('hondo.jpg'); background-size: cover; background-position: center; position: relative; }
-#title-scene::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); }
-#main-title { font-family: 'Yuji Syuku', serif; font-size: 4rem; color: #fff; text-shadow: 2px 2px 5px #000; writing-mode: vertical-rl; animation: fadeIn 3s ease-in-out; z-index: 10; margin: 0 40px; }
-@keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+#title-scene { 
+    background-image: url('hondo.jpg'); 
+    background-size: cover; 
+    background-position: center; 
+    position: relative; 
+}
+#title-scene::before { 
+    content: ''; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0, 0, 0, 0.5); 
+}
+#main-title { 
+    font-family: 'Yuji Syuku', serif; 
+    font-size: 4rem; 
+    color: #fff; 
+    text-shadow: 2px 2px 5px #000; 
+    writing-mode: vertical-rl; 
+    animation: fadeIn 3s ease-in-out; 
+    z-index: 10;
+    margin-bottom: auto;
+    padding-top: 20vh;
+}
+#start-button {
+    margin-bottom: 10vh;
+}
+@keyframes fadeIn { 
+    0% { opacity: 0; } 
+    100% { opacity: 1; } 
+}
 
-/* ▼▼▼ キャラクター選択画面のスタイルを追加 ▼▼▼ */
+/* キャラクター選択画面 */
 .character-options {
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    flex-wrap: wrap; /* スマホなどで折り返すように */
+    flex-wrap: wrap;
     gap: 20px;
     margin-top: 20px;
 }
@@ -43,17 +119,20 @@ button:hover { background-color: #ab3c3c; }
 .character-option img {
     width: 150px;
     height: 150px;
-    border-radius: 50%; /* 画像を丸くする */
-    object-fit: cover; /* 画像の比率を保ったままトリミング */
+    border-radius: 50%;
+    object-fit: cover;
     border: 3px solid #444;
     margin-bottom: 10px;
 }
 
-/* 炎(GIF)のスタイル */
-#fire-gif { width: 90%; max-width: 450px; height: auto; }
-.fire-text { z-index: 5; color: #fff; text-shadow: 0 0 10px #000; margin-top: -50px; }
+/* 炎(GIF)画面 */
+#fire-gif { 
+    width: 90%; 
+    max-width: 450px; 
+    height: auto; 
+}
 
-/* ▼▼▼ AIからの言葉の表示画面のスタイルを追加 ▼▼▼ */
+/* AIからの言葉 表示画面 */
 #response-area {
     display: flex;
     align-items: center;
@@ -68,11 +147,52 @@ button:hover { background-color: #ab3c3c; }
     height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    flex-shrink: 0; /* 画像が縮まないように */
+    flex-shrink: 0;
 }
 #response-text-container {
     text-align: left;
 }
 
 /* 終了画面 */
-#end-scene p { font-size: 1.2rem; }
+#end-scene p { 
+    font-size: 1.2rem; 
+}
+
+/* ===================================
+   スマホ向けスタイル（レスポンシブ対応）
+   =================================== */
+@media (max-width: 768px) {
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    #main-title {
+        font-size: 3rem;
+        padding-top: 15vh;
+    }
+
+    .character-options {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .character-option img {
+        width: 120px;
+        height: 120px;
+    }
+
+    #response-area {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    #response-character-image {
+        width: 100px;
+        height: 100px;
+    }
+
+    #response-text-container {
+        text-align: center;
+    }
+}
