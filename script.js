@@ -21,7 +21,6 @@ const resetButton = document.getElementById('reset-button');
 
 // --- グローバル変数 ---
 let selectedCharacterId = null;
-let activeSlide = slides.length > 0 ? slides[0] : null;
 
 // --- キャラクター情報 ---
 const characters = {
@@ -35,10 +34,29 @@ function changeScene(targetSceneId) {
     scenes.forEach(scene => scene.classList.toggle('active', scene.id === targetSceneId));
 }
 
-function updateActiveSlide() {
+// --- イベントリスナーの設定 ---
+startButton.addEventListener('click', () => {
+    if (bgmPlayer.paused) { bgmPlayer.play(); }
+    changeScene('character-select-scene');
+});
+
+// ▼▼▼ この部分にクリックでスライドする機能を追加しました ▼▼▼
+slides.forEach(slide => {
+    slide.addEventListener('click', (event) => {
+        // クリックされたスライドを中央にスムーズにスクロールさせる
+        event.currentTarget.scrollIntoView({
+            behavior: 'smooth',
+            inline: 'center',
+            block: 'nearest'
+        });
+    });
+});
+// ▲▲▲ 追加ここまで ▲▲▲
+
+selectCharacterButton.addEventListener('click', () => {
     const containerCenter = carouselContainer.getBoundingClientRect().left + carouselContainer.offsetWidth / 2;
     let minDistance = Infinity;
-    let currentActiveSlide = null;
+    let centerSlide = null;
 
     slides.forEach(slide => {
         const slideRect = slide.getBoundingClientRect();
@@ -47,53 +65,16 @@ function updateActiveSlide() {
 
         if (distance < minDistance) {
             minDistance = distance;
-            currentActiveSlide = slide;
+            centerSlide = slide;
         }
     });
 
-    if (currentActiveSlide && currentActiveSlide !== activeSlide) {
-        if(activeSlide) activeSlide.classList.remove('active');
-        currentActiveSlide.classList.add('active');
-        activeSlide = currentActiveSlide;
-    }
-}
-
-// --- イベントリスナーの設定 ---
-
-// ▼▼▼ この部分を修正しました ▼▼▼
-startButton.addEventListener('click', () => {
-    if (bgmPlayer.paused) { bgmPlayer.play(); }
-    changeScene('character-select-scene');
-    
-    // カルーセルの状態をリセットする
-    // 1. スクロール位置を一番左に戻す
-    carouselContainer.scrollLeft = 0;
-    
-    // 2. 全てのスライドから 'active' クラスを一旦削除
-    slides.forEach(slide => slide.classList.remove('active'));
-    
-    // 3. 最初のスライド（静寂さん）にだけ 'active' クラスを再設定
-    if (slides.length > 0) {
-        slides[0].classList.add('active');
-        activeSlide = slides[0];
-    }
-});
-// ▲▲▲ 修正ここまで ▲▲▲
-
-carouselContainer.addEventListener('scroll', updateActiveSlide);
-
-window.addEventListener('DOMContentLoaded', () => {
-    if(slides.length > 0) {
-        slides[0].classList.add('active');
-        activeSlide = slides[0];
-    }
-});
-
-selectCharacterButton.addEventListener('click', () => {
-    if (activeSlide) {
-        selectedCharacterId = activeSlide.dataset.character;
+    if (centerSlide) {
+        selectedCharacterId = centerSlide.dataset.character;
         inputTitle.textContent = `${characters[selectedCharacterId].name}に話す`;
         changeScene('input-scene');
+    } else {
+        alert("エラー：キャラクターを選択できませんでした。");
     }
 });
 
