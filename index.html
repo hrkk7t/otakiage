@@ -19,9 +19,18 @@
     <section id="character-select-scene" class="scene">
         <h2>どなたに話を聞いてもらいますか？</h2>
         <div class="character-options">
-            <button class="character-button" data-character="shijima">慈愛の尼僧「静寂」</button>
-            <button class="character-button" data-character="raiden">破天荒な和尚「雷電」</button>
-            <button class="character-button" data-character="matabei">化け猫の古老「又兵衛」</button>
+            <div class="character-option">
+                <img src="shijima.png" alt="慈愛の尼僧「静寂」">
+                <button class="character-button" data-character="shijima">慈愛の尼僧「静寂」</button>
+            </div>
+            <div class="character-option">
+                <img src="raiden.png" alt="破天荒な和尚「雷電」">
+                <button class="character-button" data-character="raiden">破天荒な和尚「雷電」</button>
+            </div>
+            <div class="character-option">
+                <img src="matabei.png" alt="化け猫の古老「又兵衛」">
+                <button class="character-button" data-character="matabei">化け猫の古老「又兵衛」</button>
+            </div>
         </div>
     </section>
     
@@ -37,7 +46,10 @@
     
     <section id="response-scene" class="scene">
         <div id="response-area">
-            </div>
+            <img id="response-character-image" src="" alt="キャラクター画像">
+            <div id="response-text-container">
+                </div>
+        </div>
         <button id="end-button">…心を鎮める</button>
     </section>
 
