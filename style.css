@@ -16,7 +16,7 @@ button:hover { background-color: #ab3c3c; }
 #start-button { margin-bottom: 0; }
 @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
 
-/* ▼▼▼ キャラクター選択画面（ボタン式カルーセル）のスタイル ▼▼▼ */
+/* キャラクター選択画面（ボタン式カルーセル） */
 #character-select-scene h2 { margin-bottom: 20px; }
 .carousel-wrapper {
     display: flex;
@@ -26,12 +26,12 @@ button:hover { background-color: #ab3c3c; }
     position: relative;
 }
 .carousel-container {
-    width: 200px; /* 中央のキャラ一人分の幅 */
-    overflow: hidden; /* はみ出たキャラを隠す */
+    width: 200px;
+    overflow: hidden;
 }
 .carousel-track {
     display: flex;
-    transition: transform 0.5s ease-in-out; /* スライドを滑らかに */
+    transition: transform 0.5s ease-in-out;
 }
 .carousel-slide {
     flex: 0 0 200px;
@@ -51,15 +51,25 @@ button:hover { background-color: #ab3c3c; }
     margin-top: 10px;
     color: #fff;
 }
+/* ▼▼▼ 矢印ボタンのスタイルを修正 ▼▼▼ */
 .carousel-arrow {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: #8c2323; /* 他ボタンと同じ赤色に */
+    border: none;
+    color: white;
     border-radius: 50%;
     width: 40px;
     height: 40px;
+    font-size: 1.2rem;
+    line-height: 40px; /* アイコンを上下中央に */
     padding: 0;
-    margin: 0 10px;
-    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10;
 }
+.carousel-arrow:hover {
+    background-color: #ab3c3c;
+}
+#prev-button { margin-right: 10px; }
+#next-button { margin-left: 10px; }
 #select-character-button { margin-top: 20px; }
 
 /* 炎(GIF)画面 */
@@ -77,6 +87,7 @@ button:hover { background-color: #ab3c3c; }
 @media (max-width: 768px) {
     h2 { font-size: 1.2rem; }
     #main-title { font-size: 3.5rem; }
+    .carousel-wrapper { transform: scale(0.9); } /* スマホで少しだけ全体を小さく */
     #response-area { flex-direction: column; gap: 15px; padding: 15px; }
     #response-character-image { width: 100px; height: 100px; }
     #response-text-container { text-align: center; }
