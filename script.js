@@ -5,8 +5,12 @@ const inputTitle = document.getElementById('input-title');
 const responseArea = document.getElementById('response-area');
 const responseCharImage = document.getElementById('response-character-image');
 const responseTextContainer = document.getElementById('response-text-container');
-const carouselContainer = document.querySelector('.carousel-container');
+
+// カルーセル要素
+const carouselTrack = document.querySelector('.carousel-track');
 const slides = document.querySelectorAll('.carousel-slide');
+const prevButton = document.getElementById('prev-button');
+const nextButton = document.getElementById('next-button');
 
 // プレイヤー要素
 const bgmPlayer = document.getElementById('bgm-player');
@@ -21,6 +25,8 @@ const resetButton = document.getElementById('reset-button');
 
 // --- グローバル変数 ---
 let selectedCharacterId = null;
+let currentIndex = 0; // 現在中央にいるキャラクターの番号 (0, 1, 2)
+const slideWidth = slides.length > 0 ? slides[0].offsetWidth : 0; // スライド1枚の幅
 
 // --- キャラクター情報 ---
 const characters = {
@@ -34,47 +40,33 @@ function changeScene(targetSceneId) {
     scenes.forEach(scene => scene.classList.toggle('active', scene.id === targetSceneId));
 }
 
+// カルーセルを特定の位置に動かす関数
+function goToSlide(index) {
+    carouselTrack.style.transform = 'translateX(' + (-slideWidth * index) + 'px)';
+}
+
 // --- イベントリスナーの設定 ---
 startButton.addEventListener('click', () => {
     if (bgmPlayer.paused) { bgmPlayer.play(); }
     changeScene('character-select-scene');
 });
 
-// ▼▼▼ この部分にクリックでスライドする機能を追加しました ▼▼▼
-slides.forEach(slide => {
-    slide.addEventListener('click', (event) => {
-        // クリックされたスライドを中央にスムーズにスクロールさせる
-        event.currentTarget.scrollIntoView({
-            behavior: 'smooth',
-            inline: 'center',
-            block: 'nearest'
-        });
-    });
+nextButton.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % slides.length; // 次の番号へ (最後なら最初に戻る)
+    goToSlide(currentIndex);
 });
-// ▲▲▲ 追加ここまで ▲▲▲
+
+prevButton.addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length; // 前の番号へ (最初なら最後に戻る)
+    goToSlide(currentIndex);
+});
 
 selectCharacterButton.addEventListener('click', () => {
-    const containerCenter = carouselContainer.getBoundingClientRect().left + carouselContainer.offsetWidth / 2;
-    let minDistance = Infinity;
-    let centerSlide = null;
-
-    slides.forEach(slide => {
-        const slideRect = slide.getBoundingClientRect();
-        const slideCenter = slideRect.left + slideRect.width / 2;
-        const distance = Math.abs(containerCenter - slideCenter);
-
-        if (distance < minDistance) {
-            minDistance = distance;
-            centerSlide = slide;
-        }
-    });
-
-    if (centerSlide) {
-        selectedCharacterId = centerSlide.dataset.character;
+    const currentSlide = slides[currentIndex];
+    if (currentSlide) {
+        selectedCharacterId = currentSlide.dataset.character;
         inputTitle.textContent = `${characters[selectedCharacterId].name}に話す`;
         changeScene('input-scene');
-    } else {
-        alert("エラー：キャラクターを選択できませんでした。");
     }
 });
 
@@ -103,5 +95,7 @@ endButton.addEventListener('click', () => {
 resetButton.addEventListener('click', () => {
     guchiTextarea.value = '';
     selectedCharacterId = null;
+    currentIndex = 0; // カルーセルの位置もリセット
+    goToSlide(currentIndex);
     changeScene('title-scene');
 });
