@@ -20,7 +20,7 @@ const resetButton = document.getElementById('reset-button');
 // --- グローバル変数 ---
 let selectedCharacterId = null;
 let currentIndex = 0;
-let slideWidth = 0; // ★★★ 初期値は0にしておき、後で計算する ★★★
+let slideWidth = 0;
 
 // --- キャラクター情報 ---
 const characters = {
@@ -34,19 +34,24 @@ function changeScene(targetSceneId) {
     scenes.forEach(scene => scene.classList.toggle('active', scene.id === targetSceneId));
 }
 
+// ▼▼▼ この関数に、activeクラスを管理する処理を追加 ▼▼▼
 function goToSlide(index) {
-    // slideWidthが0の場合は計算する
     if (slideWidth === 0 && slides.length > 0) {
         slideWidth = slides[0].offsetWidth;
     }
+    // カルーセルを動かす
     carouselTrack.style.transform = 'translateX(' + (-slideWidth * index) + 'px)';
+
+    // 全てのスライドからactiveクラスを削除
+    slides.forEach(slide => slide.classList.remove('active'));
+    // 中央のスライドにだけactiveクラスを追加
+    slides[index].classList.add('active');
 }
 
 // --- イベントリスナーの設定 ---
 startButton.addEventListener('click', () => {
     if (bgmPlayer.paused) { bgmPlayer.play(); }
     changeScene('character-select-scene');
-    // ▼▼▼ 表示された後にスライドの幅を計算する ▼▼▼
     if (slideWidth === 0 && slides.length > 0) {
         slideWidth = slides[0].offsetWidth;
     }
@@ -69,6 +74,11 @@ selectCharacterButton.addEventListener('click', () => {
         inputTitle.textContent = `${characters[selectedCharacterId].name}に話す`;
         changeScene('input-scene');
     }
+});
+
+// ▼▼▼ ページ読み込み完了時に最初の状態を設定するリスナーを追加 ▼▼▼
+window.addEventListener('DOMContentLoaded', () => {
+    goToSlide(0);
 });
 
 kuyoButton.addEventListener('click', () => {

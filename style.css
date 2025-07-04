@@ -18,58 +18,30 @@ button:hover { background-color: #ab3c3c; }
 
 /* キャラクター選択画面（ボタン式カルーセル） */
 #character-select-scene h2 { margin-bottom: 20px; }
-.carousel-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    position: relative;
-}
-.carousel-container {
-    width: 200px;
-    overflow: hidden;
-}
-.carousel-track {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-}
+.carousel-wrapper { display: flex; align-items: center; justify-content: center; width: 100%; position: relative; }
+.carousel-container { width: 200px; overflow: hidden; }
+.carousel-track { display: flex; transition: transform 0.5s ease-in-out; }
+
+/* ▼▼▼ この部分に演出のスタイルを追加・変更 ▼▼▼ */
 .carousel-slide {
     flex: 0 0 200px;
     text-align: center;
     padding: 0 10px;
     box-sizing: border-box;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; /* 変化を滑らかに */
+    opacity: 0.5; /* 非アクティブなスライドは半透明に */
+    transform: scale(0.8); /* 非アクティブなスライドは小さく */
 }
-.carousel-slide img {
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid #444;
+.carousel-slide.active {
+    opacity: 1; /* アクティブなスライドは不透明に */
+    transform: scale(1); /* アクティブなスライドは元の大きさに */
 }
-.carousel-slide h3 {
-    font-size: 1.2rem;
-    margin-top: 10px;
-    color: #fff;
-}
-/* ▼▼▼ 矢印ボタンのスタイルを修正 ▼▼▼ */
-.carousel-arrow {
-    background-color: transparent; /* 背景を透明に */
-    border: none;
-    color: #8c2323; /* 矢印の色を赤に */
-    font-size: 3rem; /* 矢印のサイズを大きく */
-    font-weight: bold;
-    padding: 0 15px; /* クリック領域の確保 */
-    cursor: pointer;
-    z-index: 10;
-    /* 丸い形をやめるため、関連スタイルを削除 */
-}
-.carousel-arrow:hover {
-    background-color: transparent; /* ホバー時も背景は透明 */
-    color: #ab3c3c; /* 少し明るい赤に */
-}
-#prev-button { margin: 0; } /* 余白をリセット */
-#next-button { margin: 0; } /* 余白をリセット */
-
+.carousel-slide img { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; border: 4px solid #444; }
+.carousel-slide h3 { font-size: 1.2rem; margin-top: 10px; color: #fff; }
+.carousel-arrow { background-color: transparent; border: none; color: #8c2323; font-size: 3rem; font-weight: bold; padding: 0 15px; cursor: pointer; z-index: 10; }
+.carousel-arrow:hover { background-color: transparent; color: #ab3c3c; }
+#prev-button { margin: 0; }
+#next-button { margin: 0; }
 #select-character-button { margin-top: 20px; }
 
 /* 炎(GIF)画面 */

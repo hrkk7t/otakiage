@@ -1,0 +1,7 @@
+[build]
+  # このプロジェクトにはビルド作業がないので、公開ディレクトリはルート(.)を指定
+  publish = "."
+
+[functions]
+  # Netlify Functionsのコードが置かれているディレクトリを指定
+  directory = "netlify/functions"
